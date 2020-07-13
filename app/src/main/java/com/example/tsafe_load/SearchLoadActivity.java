@@ -33,6 +33,10 @@ public class SearchLoadActivity extends AppCompatActivity implements RecyclerVie
     String destination;
     RecyclerViewAdapter adapter1;
 
+    PoiList CustomPoiList_start = new PoiList();
+    PoiList CustomPoiList_end = new PoiList();
+
+
     public location look_location(String data) {
 
         return result;
@@ -46,7 +50,6 @@ public class SearchLoadActivity extends AppCompatActivity implements RecyclerVie
         editText = findViewById(R.id.original);
         editText1 = findViewById(R.id.destination);
         recyclerView = (RecyclerView) findViewById(R.id.list);
-        final Intent intent = new Intent();
 
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -59,12 +62,10 @@ public class SearchLoadActivity extends AppCompatActivity implements RecyclerVie
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -72,7 +73,6 @@ public class SearchLoadActivity extends AppCompatActivity implements RecyclerVie
                 final String keyword = s.toString();
                 k=1;
                 adapter.filter(keyword);
-
             }
         });
 
@@ -106,39 +106,27 @@ public class SearchLoadActivity extends AppCompatActivity implements RecyclerVie
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
                 original = editText.getText().toString();
                 destination = editText1.getText().toString();
                 Log.d( adapter.return_to_value(0), original);
                 if(original.equals(adapter.return_to_value(0)) && destination .equals(adapter1.return_to_value(0))){
                     startpoint = point(adapter.return_to_point());
                     endpoint = point(adapter1.return_to_point());
-
-                    intent.putExtra("startpoint", startpoint);
-                    intent.putExtra("endpoint",endpoint);
+                    intent.putExtra("start_address", original);
+                    intent.putExtra("start_lat", startpoint.latitude);
+                    intent.putExtra("start_lon", startpoint.longitude);
+                    intent.putExtra("end_address", destination);
+                    intent.putExtra("end_lat", endpoint.latitude);
+                    intent.putExtra("end_lon", endpoint.longitude);
+                    setResult(200,intent);
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "검색값과 위치값이 일치하지 않습니다.", Toast.LENGTH_LONG).show();
                 }
-                /*
-                Intent intent = new Intent();
-                intent.putExtra("start_address", CustomPoiList_start.address);
-                intent.putExtra("start_lat", CustomPoiList_start.lat);
-                intent.putExtra("start_lon", CustomPoiList_start.lon);
-                intent.putExtra("end_address", CustomPoiList_end.address);
-                intent.putExtra("end_lat", CustomPoiList_end.lat);
-                intent.putExtra("end_lon", CustomPoiList_end.lon);
-                setResult(200,intent);
-                finish();*/
             }
         });
-
-//        //Log.d(startpoint.latitude, startpoint.longitude);
-//
-//
-//
-//        setResult(RESULT_OK, intent);
-//        finishActivity(1000);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         adapter = new RecyclerViewAdapter();
         adapter1 = new RecyclerViewAdapter();
@@ -162,7 +150,6 @@ public class SearchLoadActivity extends AppCompatActivity implements RecyclerVie
     public location point(String location) {
         String black[] = new String[4];
         black = location.split(" ");
-
         result = new location(black[1], black[3]);
         return result;
     }

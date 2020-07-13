@@ -162,6 +162,7 @@ public class FindLoad extends Activity {
         return poilist;
     }
 }
+
 class PoiList {
     String address;
     Double lat;

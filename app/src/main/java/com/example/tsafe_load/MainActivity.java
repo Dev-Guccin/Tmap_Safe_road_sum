@@ -98,16 +98,16 @@ public class MainActivity extends Activity {
                         "lon: "+data.getDoubleExtra("start_lon", 1.0), Toast.LENGTH_SHORT).show();
                 //출발지와 도착지의 GPS좌표값 저장
                 startName = data.getStringExtra("start_address");
-                startGPS[0]=data.getDoubleExtra("start_lat",1.0);
-                startGPS[1]=data.getDoubleExtra("start_lon",1.0);
+                startGPS[0]=Double.parseDouble(data.getStringExtra("start_lat"));
+                startGPS[1]=Double.parseDouble(data.getStringExtra("start_lon"));
                 endName = data.getStringExtra("end_address");
-                endGPS[0]=data.getDoubleExtra("end_lat",1.0);
-                endGPS[1]=data.getDoubleExtra("end_lon",1.0);
+                endGPS[0]=Double.parseDouble(data.getStringExtra("end_lat"));
+                endGPS[1]=Double.parseDouble(data.getStringExtra("end_lon"));
                 setmark(startGPS,startName, markerStart);
                 setmark(endGPS, endName, markerEnd);
                 Down down = new Down();
                 down.execute(startGPS[0], startGPS[1], endGPS[0], endGPS[1]);
-            }
+             }
         }
     }
 

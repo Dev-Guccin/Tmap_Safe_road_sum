@@ -47,10 +47,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final int ItemPosition = position;
-
+        Log.d("리스트 사이즈", String.valueOf(itemLists.size()));
+        Log.d("포지션", String.valueOf(ItemPosition));
         if (holder instanceof CustomViewHolder) {
             CustomViewHolder viewHolder = (CustomViewHolder) holder;
-
             viewHolder.title.setText(itemLists.get(position).getTitle());
             viewHolder.address.setText(itemLists.get(position).getAddress());
 
