@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -62,8 +63,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 
 public class MainActivity extends Activity {
-    ArrayList<TMapPOIItem> tmppoi = new ArrayList<>();
-    boolean flag = false;
 
     public TMapView tMapView;
     LocationManager lm;
@@ -80,6 +79,8 @@ public class MainActivity extends Activity {
     TMapMarkerItem markerCur = new TMapMarkerItem();
 
     TMapMarkerItem[] streetLight = new TMapMarkerItem[100];
+    ArrayList<Police_location> police_locations = new ArrayList<>();
+
 
 
     public double[] startGPS = new double[2];
@@ -87,6 +88,7 @@ public class MainActivity extends Activity {
     public double[] endGPS = new double[2];
     public String endName;
 
+    int i=0;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -275,11 +277,25 @@ public class MainActivity extends Activity {
         Street_police.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SearchLoadActivity.class);
-                startActivityForResult(intent, 1000);
+                read_csv();
+                i += 1;
+                if(i%2==0) {
+                    tMapView.removeAllMarkerItem();
+                } else {
+                    for (int i = 0; i < police_locations.size(); i++) {
+                        TMapMarkerItem markerItem1 = new TMapMarkerItem();
+                        TMapPoint tMapPoint1 = new TMapPoint(police_locations.get(i).latitude, police_locations.get(i).longitude); // 위치좌표
 
-                //location1 = intent1.getParcelableExtra("startpoint");
-                //location2 = intent1.getParcelableExtra("endpoint");
+                        // 마커 아이콘
+                        Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sheriff);
+
+                        markerItem1.setIcon(bitmap); // 마커 아이콘 지정
+                        markerItem1.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
+                        markerItem1.setTMapPoint(tMapPoint1); // 마커의 좌표 지정
+                        markerItem1.setName(police_locations.get(i).title); // 마커의 타이틀 지정
+                        tMapView.addMarkerItem("markerItem" + String.valueOf(i), markerItem1); // 지도에 마커 추가
+                    }
+                }
             }
         });
         Street_setting.setOnClickListener(new View.OnClickListener() {
@@ -290,6 +306,28 @@ public class MainActivity extends Activity {
             }
         });
 
+    }
+    public void read_csv() {
+        InputStream is = getResources().openRawResource(R.raw.policedata);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        String line;
+        try {
+            // 첫 번째 행 먼저 날리기
+            reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                String [] tokens = line.split(",");
+
+                Police_location police_location = new Police_location();
+                police_location.setTitle(tokens[0]);
+                police_location.setLatitude(Double.parseDouble(tokens[1]));
+                police_location.setLongitude(Double.parseDouble(tokens[2]));
+                police_locations.add(police_location);
+            }
+        } catch (IOException e) {
+            Log.wtf("read_csv", "IOEError");
+            e.printStackTrace();
+        }
     }
     final LocationListener gpsLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {

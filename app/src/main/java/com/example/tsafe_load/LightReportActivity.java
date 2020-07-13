@@ -2,10 +2,18 @@ package com.example.tsafe_load;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -14,11 +22,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+
+import com.skt.Tmap.TMapData;
+import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolyLine;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LightReportActivity extends Activity {
+    TextView curAddress;
     EditText editBody;
     Button getpictureBtn;
     Button pictureBtn;
@@ -38,6 +56,8 @@ public class LightReportActivity extends Activity {
     private static final int REQUEST_CODE = 0;
     private static final int CAPTURE_CODE = 1;
     private static final int REPORT_CODE;
+
+    LocationManager lm;
 
     static {
         REPORT_CODE = 3;
@@ -52,6 +72,7 @@ public class LightReportActivity extends Activity {
         getpictureBtn = (Button) findViewById(R.id.getpictureBtn);
         pictureBtn = (Button) findViewById(R.id.pictureBtn);
         reportBtn = (Button) findViewById(R.id.reportBtn);
+        curAddress = (TextView) findViewById(R.id.location);
 
         getpictureBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -78,10 +99,42 @@ public class LightReportActivity extends Activity {
                     alertDialog.show();
                 }else
                     sendMmsIntent("010-2047-0975", imgUri);
-
             }
         });
+        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions( LightReportActivity.this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
+                    0 );
+        }else{
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            String provider = location.getProvider();
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+            double altitude = location.getAltitude();
+
+            Log.d("위치","위치정보 : " + provider + "\n" +
+                    "위도 : " + longitude + "\n" +
+                    "경도 : " + latitude + "\n" +
+                    "고도  : " + altitude);
+
+        }
+    }
+    private class Down extends AsyncTask<Double, String, Void> {
+        @Override
+        protected Void doInBackground(Double... GPS) {
+            double[] start = new double[]{GPS[0],GPS[1]};
+            double[] end = new double[]{GPS[2],GPS[3]};
+            find_way(start, end);
+            return null;
+        }
+        public void find_way(double[] startGPS, double[] endGPS){
+            TMapPoint tMapPointStart = new TMapPoint(startGPS[0], startGPS[1]); // SKT타워(출발지)
+            TMapPoint tMapPointEnd = new TMapPoint(endGPS[0], endGPS[1]); // N서울타워(목적지)
+            //TMapPoint tMapPointStart = new TMapPoint(37.570841, 126.985302); // SKT타워(출발지)
+            //TMapPoint tMapPointEnd = new TMapPoint(37.551135, 126.988205); // N서울타워(목적지)
+        }
     }
     public void sendMmsIntent(String number, Uri imgUri){
         try{

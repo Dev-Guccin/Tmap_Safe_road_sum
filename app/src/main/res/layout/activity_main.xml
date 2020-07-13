@@ -48,36 +48,40 @@
         <RelativeLayout
             android:layout_width="136dp"
             android:layout_height="60dp"
-            android:background="#80ffffff">
+            android:background="#00000000"
+            android:gravity="center">
+
             <view
                 android:id="@+id/Street_lamp"
                 class="androidx.appcompat.widget.AppCompatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/icon_street_lamp"
-                android:alpha=".3"/>
+                android:layout_width="82dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/icon_street_lamp" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="136dp"
             android:layout_height="60dp"
-            android:background="#80ffffff">
+            android:background="#00000000"
+            android:gravity="center">
+
             <view
                 android:id="@+id/Street_police"
                 class="androidx.appcompat.widget.AppCompatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/police"
-                android:alpha=".3"/>
+                android:layout_width="83dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/police" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="126dp"
             android:layout_height="60dp"
-            android:background="#80ffffff">
+            android:background="#00000000">
 
             <view
                 android:id="@+id/Street_setting"
                 class="androidx.appcompat.widget.AppCompatButton"
-                android:layout_width="107dp"
+                android:layout_width="wrap_content"
                 android:layout_height="59dp"
                 android:layout_centerInParent="true"
                 android:background="@android:drawable/ic_menu_help" />
