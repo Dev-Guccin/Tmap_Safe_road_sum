@@ -93,7 +93,6 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 200) {
             if (resultCode == 200) {
-
                 Toast.makeText(MainActivity.this, "Result: " + data.getStringExtra("start_address")+"\n"+
                         "lat: " + data.getDoubleExtra("start_lat",1.0)+"\n"+
                         "lon: "+data.getDoubleExtra("start_lon", 1.0), Toast.LENGTH_SHORT).show();
@@ -137,8 +136,10 @@ public class MainActivity extends Activity {
         srchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FindLoad.class);
-                startActivityForResult(intent,200);
+                //Intent intent = new Intent(getApplicationContext(), FindLoad.class);
+                //startActivityForResult(intent,200);
+                Intent intent = new Intent(getApplicationContext(), SearchLoadActivity.class);
+                startActivityForResult(intent, 200);
             }
         });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -274,7 +275,11 @@ public class MainActivity extends Activity {
         Street_police.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SearchLoadActivity.class);
+                startActivityForResult(intent, 1000);
 
+                //location1 = intent1.getParcelableExtra("startpoint");
+                //location2 = intent1.getParcelableExtra("endpoint");
             }
         });
         Street_setting.setOnClickListener(new View.OnClickListener() {
