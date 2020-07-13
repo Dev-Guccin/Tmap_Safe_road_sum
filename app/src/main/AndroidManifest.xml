@@ -23,6 +23,7 @@
         <activity android:name=".ReportActivity" android:theme="@style/Transparent"/>
         <activity android:name=".FindLoad" android:theme="@style/Transparent" />
         <activity android:name=".LightReportActivity"/>
+        <activity android:name=".SuggestionReportActivity"/>
         <activity android:name=".SearchLoadActivity" android:theme="@style/Transparent"/>
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -31,7 +31,7 @@ public class ReportActivity extends Activity {
         otherReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LightReportActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SuggestionReportActivity.class);
                 startActivity(intent);
             }
         });
