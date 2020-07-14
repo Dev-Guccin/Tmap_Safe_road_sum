@@ -152,7 +152,10 @@ public class MainActivity extends Activity {
                     ActivityCompat.requestPermissions( MainActivity.this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
                             0 );
                 }else{
-                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    if(location == null) {
+                        location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    }
                     String provider = location.getProvider();
                     double longitude = location.getLongitude();
                     double latitude = location.getLatitude();
