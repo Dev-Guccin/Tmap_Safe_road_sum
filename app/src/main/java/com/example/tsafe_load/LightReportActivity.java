@@ -101,40 +101,7 @@ public class LightReportActivity extends Activity {
                     sendMmsIntent("010-2047-0975", imgUri);
             }
         });
-        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions( LightReportActivity.this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
-                    0 );
-        }else{
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            String provider = location.getProvider();
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
-            double altitude = location.getAltitude();
-
-            Log.d("위치","위치정보 : " + provider + "\n" +
-                    "위도 : " + longitude + "\n" +
-                    "경도 : " + latitude + "\n" +
-                    "고도  : " + altitude);
-
-        }
-    }
-    private class Down extends AsyncTask<Double, String, Void> {
-        @Override
-        protected Void doInBackground(Double... GPS) {
-            double[] start = new double[]{GPS[0],GPS[1]};
-            double[] end = new double[]{GPS[2],GPS[3]};
-            find_way(start, end);
-            return null;
-        }
-        public void find_way(double[] startGPS, double[] endGPS){
-            TMapPoint tMapPointStart = new TMapPoint(startGPS[0], startGPS[1]); // SKT타워(출발지)
-            TMapPoint tMapPointEnd = new TMapPoint(endGPS[0], endGPS[1]); // N서울타워(목적지)
-            //TMapPoint tMapPointStart = new TMapPoint(37.570841, 126.985302); // SKT타워(출발지)
-            //TMapPoint tMapPointEnd = new TMapPoint(37.551135, 126.988205); // N서울타워(목적지)
-        }
     }
     public void sendMmsIntent(String number, Uri imgUri){
         try{
