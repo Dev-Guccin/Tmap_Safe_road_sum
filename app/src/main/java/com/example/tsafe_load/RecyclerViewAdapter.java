@@ -46,13 +46,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final int ItemPosition = position;
+        final int ItemPosition = holder.getAdapterPosition();
         Log.d("리스트 사이즈", String.valueOf(itemLists.size()));
         Log.d("포지션", String.valueOf(ItemPosition));
         if (holder instanceof CustomViewHolder) {
             CustomViewHolder viewHolder = (CustomViewHolder) holder;
-            viewHolder.title.setText(itemLists.get(position).getTitle());
-            viewHolder.address.setText(itemLists.get(position).getAddress());
+            viewHolder.title.setText(itemLists.get(ItemPosition).getTitle());
+            viewHolder.address.setText(itemLists.get(ItemPosition).getAddress());
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,7 +77,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void filter(String keyword) {
-        if (keyword.length() >= 2) {
+        if (keyword.length() >= 3) {
             TMapData tMapData = new TMapData();
             tMapData.findAllPOI(keyword, new TMapData.FindAllPOIListenerCallback() {
                 @Override
